@@ -1,0 +1,25 @@
+name: HMPSP PPSSPP Tool
+
+on:
+  push:
+    branches:
+      - hotline-miami-psp-workbench
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch PPSSPP Linux AppImage
+        run: |
+          curl -L --fail --retry 3 -o PPSSPP.AppImage https://github.com/hrydgard/ppsspp/releases/download/v1.20.4/PPSSPP-v1.20.4-anylinux-x86_64.AppImage
+          chmod +x PPSSPP.AppImage
+      - name: Upload PPSSPP
+        uses: actions/upload-artifact@v4
+        with:
+          name: PPSSPP-Linux
+          path: PPSSPP.AppImage
+          retention-days: 2

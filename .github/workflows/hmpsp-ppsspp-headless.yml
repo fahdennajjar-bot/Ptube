@@ -16,13 +16,13 @@ jobs:
       - name: Dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq build-essential cmake ninja-build libgl1-mesa-dev libegl1-mesa-dev
+          sudo apt-get install -y -qq build-essential cmake ninja-build libgl1-mesa-dev libegl1-mesa-dev libsdl2-dev
       - name: Clone PPSSPP
         run: |
           git clone --recursive --depth 1 --branch v1.20.4 https://github.com/hrydgard/ppsspp.git ppsspp
       - name: Build headless
         run: |
-          cmake -S ppsspp -B ppsspp/build -G Ninja -DHEADLESS=ON -DHEADLESS_CROSS=ON -DCMAKE_BUILD_TYPE=Release
+          cmake -S ppsspp -B ppsspp/build -G Ninja -DHEADLESS=ON -DCMAKE_BUILD_TYPE=Release
           cmake --build ppsspp/build --target PPSSPPHeadless -j2
       - name: Package
         run: |

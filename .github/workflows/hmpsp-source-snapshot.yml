@@ -1,0 +1,35 @@
+name: HMPSP Source Snapshot
+
+on:
+  push:
+    branches:
+      - hotline-miami-psp-workbench
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout workbench branch
+        uses: actions/checkout@v4
+
+      - name: Clone Butterscotch runner
+        run: |
+          git clone --depth 1 https://github.com/ButterscotchRunner/Butterscotch.git butterscotch
+          git -C butterscotch rev-parse HEAD > butterscotch/SOURCE_COMMIT.txt
+          rm -rf butterscotch/.git
+
+      - name: Package source
+        run: |
+          tar -czf Butterscotch-source.tar.gz butterscotch
+
+      - name: Upload source snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: Butterscotch-source
+          path: Butterscotch-source.tar.gz
+          if-no-files-found: error
+          retention-days: 7
